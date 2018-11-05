@@ -5,7 +5,7 @@ const request = require('request');
 
 const Post = require('../models/postModels');
 const User = require('../models/userModels');
-const keys = require('../config/secret');
+const keys = require('../config/keys');
 
 cloudinary.config({ 
   cloud_name: keys.cloud_name, 
