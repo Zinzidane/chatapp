@@ -6,6 +6,8 @@ const cors = require('cors');
 const _ = require('lodash');
 
 const app = express();
+
+// Keys
 const dbConfig = require('./config/keys');
 
 const server = require('http').createServer(app);
