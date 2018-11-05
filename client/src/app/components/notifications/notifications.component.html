@@ -1,0 +1,26 @@
+<div class="col s12 m8 l9" *ngIf="!loading; else loadingBlock">
+  <ul class="collection col s12 m10" *ngIf="notifications.length > 0; else empty">
+    <li class="collection-item avatar" *ngFor="let notificationEl of notifications">
+      <img class="circle" src="https://res.cloudinary.com/dkqx63bec/image/upload/v{{notificationEl.senderId.picVersion}}/{{notificationEl.senderId.picId}}" alt="User avatar">
+      <span class="title">{{notificationEl.message}}</span>
+      <a class="secondary-content">
+        <i *ngIf="!notificationEl.read" class="material-icons">brightness_1</i>
+        <i *ngIf="notificationEl.read" class="material-icons">panorama_fish_eye</i>
+      </a>
+      <p class="time">{{TimeFromNow(notificationEl.created)}}</p>
+      <div>
+        <i class="material-icons" (click)="MarkNotification(notificationEl)" [ngClass]="notificationEl.read ? 'disabled' : 'notDisabled'">check</i>
+        <i class="material-icons" (click)="DeleteNotification(notificationEl)">delete_forever</i>
+      </div>
+    </li>
+  </ul>
+  <ng-template #empty>
+    <div class="row">
+      <h3 class="text">You have no notifications yet</h3>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #loadingBlock>
+  <app-loader></app-loader>
+</ng-template>

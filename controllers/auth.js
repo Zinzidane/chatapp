@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModels');
 const helpers = require('../helpers/helpers');
-const dbConfig = require('../config/secret');
+const dbConfig = require('../config/keys');
 
 module.exports = {
   async CreateUser(req, res) {
