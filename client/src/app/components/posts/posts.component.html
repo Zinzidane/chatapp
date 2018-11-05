@@ -1,0 +1,82 @@
+<div class="row">
+  <div class="col s12 m12 l10">
+    <div class="card postDiv">
+      <div class="card-content">
+        <form [formGroup]="postForm" novalidate (ngSubmit)="SubmitPost()">
+          <div class="formDiv">
+            <textarea formControlName="post" class="materialize-textarea"></textarea>
+            <div class="row">
+              <div class="file-field input-field col s6">
+                <div class="btn">
+                  <span class="addImageBtn">
+                    <i class="material-icons">image</i>
+                    Image
+                  </span>
+                  <input type="file" ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text">
+                </div>
+              </div>
+              <button class="btn postBtn">Post</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="!reloading; else reloadingBlock">
+  <div class="col s12" *ngIf="posts.length > 0; else empty">
+    <ul class="collection col s12 m12 l10">
+      <li class="collection-item avatar" *ngFor="let post of posts">
+        <img src="https://res.cloudinary.com/dkqx63bec/image/upload/v{{post.user.picVersion}}/{{post.user.picId}}" alt="Avatar" class="circle">
+        <span class="title">{{post.username}}</span>
+        <p class="time">{{TimeFromNow(post.created)}} <br>
+          @{{post.user.city}}, {{post.user.country}}
+        </p>
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-image" *ngIf="post.imgId">
+                <img class="postImage" src="https://res.cloudinary.com/dkqx63bec/image/upload/v{{post.imgVersion}}/{{post.imgId}}">
+              </div>
+              <div class="card-content">
+                <p>{{post.post}}</p>
+              </div>
+              <div class="card-action">
+                <i class="material-icons" [ngClass]="(!CheckInArray(post.likes, user.username)) ? 'notLiked' : 'liked'" (click)="LikePost(post)">thumb_up</i>
+                <span class="iconSpan">{{post.totalLikes}}</span>
+                <i class="material-icons" [ngClass]="(!CheckInArray(post.comments, user.username)) ? 'notLiked' : 'liked'" (click)="OpenCommentBox(post)">chat</i>
+                <span class="iconSpan">{{post.comments.length}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="row" *ngIf="!noMorePosts">
+      <div class="col s12 center">
+        <button
+          class="btn"
+          (click)="LoadMore()"
+          *ngIf="!loading; else loader"
+        >
+          Show more
+        </button>
+        <ng-template #loader>
+          <app-loader></app-loader>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="center">No posts yet.</div>
+  </ng-template>
+</div>
+
+<ng-template #reloadingBlock>
+  <app-loader></app-loader>
+</ng-template>
