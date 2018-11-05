@@ -15,6 +15,8 @@ const io = require('socket.io').listen(server);
 
 const { User } = require('./helpers/UserClass');
 
+const port = process.env.PORT || 3000;
+
 require('./socket/streams')(io, User, _);
 require('./socket/private')(io);
 
@@ -42,6 +44,6 @@ app.use('/api/chatapp', friends);
 app.use('/api/chatapp', message);
 app.use('/api/chatapp', image);
 
-server.listen(3000, () => {
-  console.log('Running on port 3000');
+server.listen(port, () => {
+  console.log(`Running on port ${port}`);
 });
