@@ -24,12 +24,10 @@ const routes: Routes = [
       {
         path: 'post/:id',
         component: CommentsComponent,
-        canActivate: [AuthGuard]
       },
       {
         path: 'people',
         component: PeopleComponent,
-        canActivate: [AuthGuard]
       },
       {
         path: 'people/following',
