@@ -158,5 +158,27 @@ module.exports = {
       .populate('comments.userId')
       .then(post => res.status(HttpStatus.OK).json({message: 'Post found', post}))
       .catch(err => res.status(HttpStatus.NOT_FOUND).json({message: 'Post not found'}))
+  },
+  async DeletePost(req, res) {
+    try {
+      const result = await Post.findOneAndRemove(req.body.id);
+
+      if(!result) {
+        return res.status(HttpStatus.NOT_FOUND).json({message: 'Post could not be deleted'});
+      } else {
+        await User.update({
+          _id: req.user._id
+        }, {
+          $pull: {posts: {
+            postId: result._id
+          }}
+        });
+
+        return res.status(HttpStatus.OK).json({message: 'Post deleted successfully'});
+      }
+       
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: error});
+    }    
   }
 };

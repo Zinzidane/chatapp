@@ -51,6 +51,7 @@
                 <i class="material-icons" [ngClass]="(!CheckInArray(post.comments, user.username)) ? 'notLiked' : 'liked'" (click)="OpenCommentBox(post)">chat</i>
                 <span class="iconSpan">{{post.comments.length}}</span>
               </div>
+              <button *ngIf="post.username === user.username" class="secondary-content btn" (click)="DeletePost(post._id)">Delete</button>
             </div>
           </div>
         </div>

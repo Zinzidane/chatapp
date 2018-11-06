@@ -177,4 +177,10 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
   OpenCommentBox(post) {
     this.router.navigate(['post', post._id]);
   }
+
+  DeletePost(postId) {
+    this.postService.deletePost(postId).subscribe(data => {
+      this.socket.emit('refresh', {});
+    }, err => console.log(err));
+  }
 }
