@@ -153,6 +153,7 @@ module.exports = {
     .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Error occured'}));
   },
   async GetPost(req, res) {
+    console.log(req.params.id);
     await Post.findOne({_id: req.params.id})
       .populate('user')
       .populate('comments.userId')
@@ -160,8 +161,12 @@ module.exports = {
       .catch(err => res.status(HttpStatus.NOT_FOUND).json({message: 'Post not found'}))
   },
   async DeletePost(req, res) {
+ 
+    const {id} = req.params;
+    console.log(id);
     try {
-      const result = await Post.findOneAndRemove(req.body.id);
+      const result = await Post.findOneAndDelete({_id:id});
+      console.log(result);
 
       if(!result) {
         return res.status(HttpStatus.NOT_FOUND).json({message: 'Post could not be deleted'});

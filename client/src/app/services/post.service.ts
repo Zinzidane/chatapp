@@ -34,6 +34,6 @@ export class PostService {
   }
 
   deletePost(id):Observable<any> {
-    return this.http.delete(`/api/chatapp/delete-post/${id}`);
+    return this.http.delete(`/api/chatapp/post/delete-post/${id}`);
   }
 }

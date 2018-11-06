@@ -140,7 +140,6 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
     this.pSub = this.postService.getAllPosts(params).subscribe(data => {
       this.loading = false;
       this.reloading = false;
-      console.log(data.posts);
       // this.posts = _.uniqBy(this.posts.concat(data.posts), 'post');
       this.posts = data.posts;
       console.log(this.posts, 'uniqby');
@@ -178,8 +177,8 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
     this.router.navigate(['post', post._id]);
   }
 
-  DeletePost(postId) {
-    this.postService.deletePost(postId).subscribe(data => {
+  DeletePost(post) {
+    this.postService.deletePost(post._id).subscribe(data => {
       this.socket.emit('refresh', {});
     }, err => console.log(err));
   }
