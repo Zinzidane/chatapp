@@ -15,7 +15,7 @@ import { ToolbarComponent } from '../components/toolbar/toolbar.component';
 
 // canActivate: [AuthGuard]
 const routes: Routes = [
- { path: '', component: ToolbarComponent, children:
+ { path: 'st', component: ToolbarComponent, children:
     [
       {
         path: 'streams',
