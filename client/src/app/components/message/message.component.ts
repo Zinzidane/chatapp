@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChanges, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { TokenService } from '../../services/token.service';
 import { MessageService } from '../../services/message.service';
 import { ActivatedRoute } from '@angular/router';
@@ -11,8 +11,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./message.component.css']
 })
 export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() users;
