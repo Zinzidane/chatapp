@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import * as moment from 'moment';
 import io from 'socket.io-client';
@@ -8,8 +8,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FileUploader } from 'ng2-file-upload';
+import { environment } from '../../../environments/environment';
 
-const STEP = 2;
+const STEP = 3;
 // const URL = 'http://localhost:3000/api/chatapp/upload-image';
 const URL = '/api/chatapp/upload-image';
 
@@ -18,7 +19,7 @@ const URL = '/api/chatapp/upload-image';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })
-export class PostsComponent implements OnInit, OnDestroy, OnChanges {
+export class PostsComponent implements OnInit, OnDestroy {
   uploader: FileUploader = new FileUploader({
     url: URL,
     disableMultipart: true
@@ -39,11 +40,12 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
   getPostsSub: Subscription;
 
   constructor(private postService: PostService, private tokenService: TokenService, private router: Router,private fb: FormBuilder) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {
     this.reloading = true;
+    this.loading = false;
     this.init();
 
     // Get user for later usage in CheckInLikesArray
@@ -53,10 +55,6 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
     this.socket.on('refreshPage', (data) => {
       this.AllPosts();
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.prop);
   }
 
   ngOnDestroy() {
@@ -96,7 +94,8 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
       };
     }
     this.submitSub = this.postService.addPost(body).subscribe(data => {
-      this.socket.emit('refresh', {});
+      // this.socket.emit('refresh', {});
+      this.GetPosts();
       this.postForm.reset();
       if(this.selectedFile) {
         this.selectedFile = null;
@@ -130,7 +129,7 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
 
 
   AllPosts() {
-    this.reloading = true;
+    // this.reloading = true;
     this.loading = true;
     const params = {
       offset: 0,
@@ -142,8 +141,33 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
       this.reloading = false;
       // this.posts = _.uniqBy(this.posts.concat(data.posts), 'post');
       this.posts = data.posts;
-      console.log(this.posts, 'uniqby');
-      this.noMorePosts = data.posts.length < STEP;
+      // console.log(this.posts, 'uniqby');
+      this.noMorePosts = data.posts.length < (this.limit + this.offset);
+    }, err => {
+      this.loading = false;
+      this.reloading = false;
+      if(err.error.token === null) {
+        this.tokenService.DeleteToken();
+        this.router.navigate(['']);
+      }
+    });
+  }
+
+  GetPosts() {
+    // this.reloading = true;
+    // this.loading = true;
+    const params = {
+      offset: 0,
+      limit: this.limit + this.offset
+    };
+
+    this.pSub = this.postService.getAllPosts(params).subscribe(data => {
+      this.loading = false;
+      this.reloading = false;
+      // this.posts = _.uniqBy(this.posts.concat(data.posts), 'post');
+      this.posts = data.posts;
+      // console.log(this.posts, 'uniqby');
+      this.noMorePosts = data.posts.length < (this.limit + this.offset);
     }, err => {
       this.loading = false;
       this.reloading = false;
@@ -169,7 +193,8 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
 
   LikePost(post) {
     this.lSub = this.postService.addLike(post).subscribe(data => {
-      this.socket.emit('refresh', {});
+      // this.socket.emit('refresh', {});
+      this.GetPosts();
     }, err => console.log(err));
   }
 
@@ -179,7 +204,8 @@ export class PostsComponent implements OnInit, OnDestroy, OnChanges {
 
   DeletePost(post) {
     this.postService.deletePost(post._id).subscribe(data => {
-      this.socket.emit('refresh', {});
+      // this.socket.emit('refresh', {});
+      this.GetPosts();
     }, err => console.log(err));
   }
 }

@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import io from 'socket.io-client';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 const STEP = 3;
 
@@ -27,10 +28,13 @@ export class TopStreamsComponent implements OnInit, OnDestroy {
   lSub: Subscription;
 
   constructor(private postService: PostService, private tokenService: TokenService, private router: Router) {
-    this.socket = io();
+    // this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {
+    this.reloading = true;
+    this.loading = false;
     this.user = this.tokenService.GetPayload();
     this.AllPosts();
 
@@ -47,11 +51,10 @@ export class TopStreamsComponent implements OnInit, OnDestroy {
     if(this.lSub) {
       this.lSub.unsubscribe();
     }
-
   }
 
   AllPosts() {
-    this.reloading = true;
+    // this.reloading = true;
     this.loading = true;
     const params = {
       offset: 0,
@@ -61,11 +64,35 @@ export class TopStreamsComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.reloading = false;
       this.topPosts = data.top;
-      this.noMorePosts = data.top.length < STEP;
+      this.noMorePosts = data.top.length < (this.limit + this.offset);
     }, err => {
       if(err.error.token === null) {
         this.loading = false;
         this.reloading = false;
+        this.tokenService.DeleteToken();
+        this.router.navigate(['']);
+      }
+    });
+  }
+
+  GetPosts() {
+    // this.reloading = true;
+    // this.loading = true;
+    const params = {
+      offset: 0,
+      limit: this.limit + this.offset
+    };
+
+    this.aSub = this.postService.getAllPosts(params).subscribe(data => {
+      this.loading = false;
+      this.reloading = false;
+      // this.posts = _.uniqBy(this.posts.concat(data.posts), 'post');
+      this.topPosts = data.top;
+      this.noMorePosts = data.top.length < (this.limit + this.offset);
+    }, err => {
+      this.loading = false;
+      this.reloading = false;
+      if(err.error.token === null) {
         this.tokenService.DeleteToken();
         this.router.navigate(['']);
       }
@@ -87,7 +114,8 @@ export class TopStreamsComponent implements OnInit, OnDestroy {
 
   LikePost(post) {
     this.lSub = this.postService.addLike(post).subscribe(data => {
-      this.socket.emit('refresh', {});
+      // this.socket.emit('refresh', {});
+      this.GetPosts();
     }, err => console.log(err));
   }
 

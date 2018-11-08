@@ -3,6 +3,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { TokenService } from 'src/app/services/token.service';
 import io from 'socket.io-client';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-followers',
@@ -17,7 +18,7 @@ export class FollowersComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(private tokenService: TokenService, private usersService: UsersService) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

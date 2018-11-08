@@ -3,6 +3,7 @@ import { TokenService } from '../../services/token.service';
 import { UsersService } from '../../services/users.service';
 import io from 'socket.io-client';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-side',
@@ -16,7 +17,7 @@ export class SideComponent implements OnInit, OnDestroy {
   gSub: Subscription;
 
   constructor(private tokenService: TokenService, private usersService: UsersService) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

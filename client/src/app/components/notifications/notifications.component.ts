@@ -4,6 +4,7 @@ import { UsersService } from '../../services/users.service';
 import io from 'socket.io-client';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-notifications',
@@ -20,7 +21,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(private tokenService: TokenService, private usersService: UsersService) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

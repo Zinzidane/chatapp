@@ -1,5 +1,7 @@
 .bodyDiv {
-  height: 100vh;
+  /* height: 100vh; */
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 div.bodyContainer {
@@ -21,5 +23,5 @@ div.bodyContainer {
 }
 
 .auth-content {
-  height: 515px;
+  height: 415px;
 }

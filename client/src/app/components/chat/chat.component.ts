@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import io from 'socket.io-client';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-chat',
@@ -12,7 +13,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   socket: any;
 
   constructor() {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

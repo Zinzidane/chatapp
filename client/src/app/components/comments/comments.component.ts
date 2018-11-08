@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import io from 'socket.io-client';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-comments',
@@ -22,7 +23,7 @@ export class CommentsComponent implements OnInit, AfterViewInit, OnDestroy {
   gSub: Subscription;
 
   constructor(private fb: FormBuilder, private postService: PostService, private route: ActivatedRoute) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
     this.commentForm = this.fb.group({
       comment: ['', Validators.required]
     });

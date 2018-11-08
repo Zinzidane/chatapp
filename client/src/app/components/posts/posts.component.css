@@ -97,3 +97,8 @@ form {
 .file-field input[type="file"] {
   width: 70%;
 }
+
+.text {
+  text-align: center;
+  font-size: 18px;
+}

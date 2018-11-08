@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 import _ from 'lodash';
 import { MessageService } from '../../services/message.service';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -35,7 +36,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private usersService: UsersService,
     private msgService: MessageService
   ) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

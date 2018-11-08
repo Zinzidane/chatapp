@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import { CaretEvent, EmojiEvent, EmojiPickerOptions } from 'ng2-emoji-picker';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-message',
@@ -45,7 +46,7 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
     private route: ActivatedRoute,
     private emojiPickerOptions: EmojiPickerOptions
     ) {
-      this.socket = io();
+      this.socket = io(environment.ioAddress);
       // this.emojiPickerOptions.setEmojiSheet({
       //   url: 'sheet_apple_32.png',
       //   locator: EmojiPickerAppleSheetLocator

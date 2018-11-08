@@ -124,7 +124,7 @@ module.exports = {
   },
   async AddLike(req, res) {
     const postId = req.body._id;
-    await Post.update({
+    await Post.updateOne({
         _id: postId,
         // To like only once by one user
         "likes.username": {$ne: req.user.username}

@@ -56,3 +56,8 @@
 .collection-item {
   border: none !important;
 }
+
+.text {
+  text-align: center;
+  font-size: 18px;
+}

@@ -5,6 +5,7 @@ import { TokenService } from '../../services/token.service';
 import io from 'socket.io-client';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-people',
@@ -24,7 +25,7 @@ export class PeopleComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
 
   constructor(private userService: UsersService, private tokenService: TokenService, private router: Router) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

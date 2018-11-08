@@ -4,6 +4,7 @@ import { UsersService } from '../../services/users.service';
 import { TokenService } from '../../services/token.service';
 import io from 'socket.io-client';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 // const URL = 'http://localhost:3000/api/chatapp/upload-image';
 const URL = '/api/chatapp/upload-image';
@@ -27,7 +28,7 @@ export class ImagesComponent implements OnInit, OnDestroy {
   gSub: Subscription;
 
   constructor(private usersService: UsersService, private tokenService: TokenService) {
-    this.socket = io();
+    this.socket = io(environment.ioAddress);
   }
 
   ngOnInit() {

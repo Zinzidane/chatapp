@@ -6,7 +6,7 @@
       </div>
       <h3 id="title">Sign Up</h3>
       <div id="errorMsg" *ngIf="errorMessage">
-        <span>{{errorMessage}}d</span>
+        <span>{{errorMessage}}</span>
       </div>
       <form class="col s12" [formGroup]="signupForm" novalidate (ngSubmit)="signupUser()">
         <div class="row">

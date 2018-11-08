@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       }, err => {
         this.showSpinner = false;
         if(err.error.msg) {
-          this.errorMessage = err.error.msg[0].message
+          this.errorMessage = err.error.msg[0].message;
         }
 
         if(err.error.message) {
