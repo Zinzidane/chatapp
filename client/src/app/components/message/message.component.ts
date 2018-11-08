@@ -4,7 +4,7 @@ import { MessageService } from '../../services/message.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from '../../services/users.service';
 import io from 'socket.io-client';
-import { CaretEvent, EmojiEvent, EmojiPickerOptions, EmojiPickerAppleSheetLocator } from 'ng2-emoji-picker';
+import { CaretEvent, EmojiEvent } from 'ng2-emoji-picker';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -39,18 +39,19 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
 
   _lastCaretEvent: CaretEvent;
 
+
+    // private emojiPickerOptions: EmojiPickerOptions
   constructor(
     private tokenService: TokenService,
     private usersService: UsersService,
     private msgService: MessageService,
-    private route: ActivatedRoute,
-    private emojiPickerOptions: EmojiPickerOptions
+    private route: ActivatedRoute
     ) {
       this.socket = io(environment.ioAddress);
-      this.emojiPickerOptions.setEmojiSheet({
-        url: 'sheet_apple_32.png',
-        locator: EmojiPickerAppleSheetLocator
-      });
+      // this.emojiPickerOptions.setEmojiSheet({
+      //   url: 'sheet_apple_32.png',
+      //   locator: EmojiPickerAppleSheetLocator
+      // });
     }
 
   ngOnInit() {

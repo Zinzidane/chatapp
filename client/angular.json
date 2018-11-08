@@ -20,8 +20,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              { "glob": "sheet_apple_32.png", "input": "../node_modules/angular2-emoji-picker/sheets/", "output": "./" }
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
