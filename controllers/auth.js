@@ -10,20 +10,16 @@ const dbConfig = require('../config/keys');
 module.exports = {
   async CreateUser(req, res) {
     const schema = Joi.object().keys({
-      username: Joi.string().min(3).max(15).required(),
+      username: Joi.string().min(2).max(15).required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(5).required(),
     });
 
-    // const { error, value } = Joi.validate(req.body, schema);
+    const { error, value } = Joi.validate(req.body, schema);
 
-    console.log(req.body);
-    // console.log(error);
-    // console.log(error.details);
-
-    // if(error & error.details) {
-    //   return res.status(HttpStatus.BAD_REQUEST).json({msg: error.details});
-    // }
+    if(error & error.details) {
+      return res.status(HttpStatus.BAD_REQUEST).json({msg: error.details});
+    }
 
     const userEmail = await User.findOne({email: helpers.lowerCase(req.body.email)});
 
