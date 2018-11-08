@@ -24,7 +24,7 @@ module.exports = {
         conversationId: conversation._id
       });
 
-      console.log(messages);
+
       return res.status(HttpStatus.OK).json({message: 'Messages returned', messages});
     }
   },
@@ -39,7 +39,7 @@ module.exports = {
         ]
       }, async (err, result) => {
         if (result.length > 0) {
-          console.log(result);
+
           const msg = await Message.findOne({
             conversationId: result[0]._id
           });

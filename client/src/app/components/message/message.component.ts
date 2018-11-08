@@ -1,10 +1,9 @@
-import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, OnChanges, SimpleChanges, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { TokenService } from '../../services/token.service';
 import { MessageService } from '../../services/message.service';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService } from '../../services/users.service';
 import io from 'socket.io-client';
-import { CaretEvent, EmojiEvent, EmojiPickerOptions, EmojiPickerAppleSheetLocator } from 'ng2-emoji-picker';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -12,14 +11,15 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  styleUrls: ['./message.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() users;
   receiver: string;
   receiverData: any;
   user: any;
-  message: string;
+  message = '';
   messages = [];
   socket: any;
   typingMessage;
@@ -30,29 +30,16 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
   sendMessageSub: Subscription;
   sideDivElement: any;
 
-  eventMock;
-  eventPosMock;
-
-  direction = Math.random() > 0.5 ? (Math.random() > 0.5 ? 'top' : 'bottom') : (Math.random() > 0.5 ? 'right' : 'left');
-  toggled = false;
-  content = ' ';
-
-  _lastCaretEvent: CaretEvent;
+  openPopup: Function;
 
 
-    // private emojiPickerOptions: EmojiPickerOptions
   constructor(
     private tokenService: TokenService,
     private usersService: UsersService,
     private msgService: MessageService,
-    private route: ActivatedRoute,
-    private emojiPickerOptions: EmojiPickerOptions
+    private route: ActivatedRoute
     ) {
       this.socket = io(environment.ioAddress);
-      this.emojiPickerOptions.setEmojiSheet({
-        url: 'sheet_apple_32.png',
-        locator: EmojiPickerAppleSheetLocator
-      });
     }
 
   ngOnInit() {
@@ -70,18 +57,15 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
       });
 
       this.socket.on('is_typing', data => {
-        console.log(data.sender, this.receiver);
         if(data.sender === this.receiver) {
           this.typing = true;
-          console.log(this.typing, 'typing');
         }
       });
 
       this.socket.on('has_stopped_typing', data => {
-        console.log(data.sender, this.receiver);
+
         if(data.sender === this.receiver) {
           this.typing = false;
-          console.log(this.typing, 'typing');
         }
       });
     });
@@ -128,6 +112,9 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
     this.sideDivElement.style.display = 'block';
   }
 
+  setPopupAction(fn: any) {
+    this.openPopup = fn;
+  }
 
   GetUserByUsername(username) {
     this.gSub = this.usersService.GetUserByName(username).subscribe(data => {
@@ -159,8 +146,6 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
       receiver: this.receiver
     });
 
-    console.log(this.receiver);
-
     if(this.typingMessage) {
       clearTimeout(this.typingMessage);
     }
@@ -171,25 +156,5 @@ export class MessageComponent implements OnInit, AfterViewInit, OnChanges, OnDes
         receiver: this.receiver
       });
     }, 500);
-  }
-
-  Toggled() {
-    this.toggled = !this.toggled;
-  }
-
-  HandleSelection(event: EmojiEvent) {
-    this.content = this.content.slice(0, this._lastCaretEvent.caretOffset) + event.char + this.content.slice(this._lastCaretEvent.caretOffset);
-    this.eventMock = JSON.stringify(event);
-
-    this.message = this.content;
-
-    this.toggled = !this.toggled;
-    // Clear emoji
-    this.content = '';
-  }
-
-  HandleCurrentCaret(event: CaretEvent) {
-    this._lastCaretEvent = event;
-    this.eventPosMock = `{ caretOffset : ${event.caretOffset}, caretRange: Range{...}, textContent: ${event.textContent} }`;
   }
 }

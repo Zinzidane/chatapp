@@ -48,23 +48,22 @@
         <div class="inputRow">
           <form (ngSubmit)="SendMessage()">
             <div class="input-field col s9 m9 inputField">
-              <textarea name="message" [(ngModel)]="message" (keypress)="IsTyping()" class="materialize-textarea inputBox"></textarea>
+              <!-- <textarea name="message" [(ngModel)]="message" (keypress)="IsTyping()" class="materialize-textarea inputBox"></textarea> -->
+              <emoji-input
+                [(model)]="message"
+                [inputClass]="'materialize-textarea inputBox'"
+                (keypress)="IsTyping()"
+                [searchClass]="'blue'"
+                [popupAnchor]="'bottom'"
+                [closeAfterSelection]="true"
+                (click)="openPopup(false)"
+                (setPopupAction)="setPopupAction($event)">
+              </emoji-input>
             </div>
             <div class="input-field col s3 m1 emojiDiv" >
-              <button class="emojiBtn" (click)="Toggled()" style="cursor: pointer;">😄</button>
-              <div class="emoji-content-editable"
-                  (emojiPickerCaretEmitter)="HandleCurrentCaret($event)"
-                  (input)="content = $event.target.textContent"
-                  [textContent]="content"
-                  contenteditable="true">
-              </div>
-              <i
-                  class="emoji-toggle-button imgBtn"
-                  [(emojiPickerIf)]="toggled"
-                  [emojiPickerPreserveSelection]="false"
-                  [emojiPickerDirection]="direction"
-                  [emojiPickerAutofocus]="true"
-                  (emojiPickerSelect)="HandleSelection($event)"></i>
+              <button class="emojiBtn" type="button" name="button" style="cursor: pointer;"  (click)="openPopup()">
+                😄
+              </button>
             </div>
             <div class="input-field col s12 m2 center">
               <button class="suffix btn">Send</button>
