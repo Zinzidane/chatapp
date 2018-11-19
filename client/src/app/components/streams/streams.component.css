@@ -7,3 +7,11 @@
 .tabs .active {
   background-color: inherit;
 }
+
+@media only screen and (max-width: 380px) {
+  .tabs {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+  }
+}

@@ -2,12 +2,11 @@
   <div class="row">
     <div class="col s12 m12 l10">
       <ul class="tabs tabs-fixed-width">
-        <li class="tab col s6"><a href="#streams" class="active" (click)="ChangeTabs('streams')">Streams</a></li>
-        <li class="tab col s6"><a href="#top" (click)="ChangeTabs('top')">Top Streams</a></li>
+        <li class="tab"><a href="#streams" class="active" (click)="ChangeTabs('streams')">Streams</a></li>
+        <li class="tab"><a href="#top" (click)="ChangeTabs('top')">Top Streams</a></li>
       </ul>
     </div>
     <div id="streams" class="col s12" *ngIf="streamsTab">
-      <!-- <app-post-form></app-post-form> -->
       <app-posts></app-posts>
     </div>
     <div id="top" class="col s12" *ngIf="topStreamsTab">

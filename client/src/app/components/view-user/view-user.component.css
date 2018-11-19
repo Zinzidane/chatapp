@@ -71,3 +71,9 @@
 .liked {
   color: #64b5f6;
 }
+
+@media only screen and (min-width: 380px) {
+  .tabs a {
+    font-size: 12px;
+  }
+}
