@@ -17,7 +17,7 @@
                 <p>{{post.post}}</p>
               </div>
               <div class="card-action">
-                <i class="material-icons" [ngClass]="(!CheckInArray(post.likes, user.username)) ? 'notLiked' : 'liked'" (click)="LikePost(post)">thumb_up</i>
+                <i class="material-icons" [ngClass]="(!CheckInArray(post.likes, user.username)) ? 'notLiked' : 'liked'" (click)="LikePost(post, user.username)">thumb_up</i>
                 <span class="iconSpan">{{post.totalLikes}}</span>
                 <i class="material-icons" [ngClass]="(!CheckInArray(post.comments, user.username)) ? 'notLiked' : 'liked'" (click)="OpenCommentBox(post)">chat</i>
                 <span class="iconSpan">{{post.comments.length}}</span>

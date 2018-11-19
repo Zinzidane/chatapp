@@ -139,9 +139,9 @@ export class PostsComponent implements OnInit, OnDestroy {
     this.pSub = this.postService.getAllPosts(params).subscribe(data => {
       this.loading = false;
       this.reloading = false;
-      // this.posts = _.uniqBy(this.posts.concat(data.posts), 'post');
+
       this.posts = data.posts;
-      // console.log(this.posts, 'uniqby');
+
       this.noMorePosts = data.posts.length < (this.limit + this.offset);
     }, err => {
       this.loading = false;
@@ -191,9 +191,18 @@ export class PostsComponent implements OnInit, OnDestroy {
     return _.some(arr, {username: username});
   }
 
-  LikePost(post) {
-    this.lSub = this.postService.addLike(post).subscribe(data => {
-      // this.socket.emit('refresh', {});
+  LikePost(post, username) {
+    if(this.CheckInArray(post.likes, username)) {
+      this.UnlikePost(post);
+    } else {
+      this.lSub = this.postService.addLike(post).subscribe(data => {
+        this.GetPosts();
+      }, err => console.log(err));
+    }
+  }
+
+  UnlikePost(post) {
+    this.lSub = this.postService.removeLike(post).subscribe(data => {
       this.GetPosts();
     }, err => console.log(err));
   }

@@ -67,3 +67,7 @@
 .collection-item {
   border: none !important;
 }
+
+.liked {
+  color: #64b5f6;
+}

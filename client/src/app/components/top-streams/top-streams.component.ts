@@ -112,9 +112,18 @@ export class TopStreamsComponent implements OnInit, OnDestroy {
     return _.some(arr, {username: username});
   }
 
-  LikePost(post) {
-    this.lSub = this.postService.addLike(post).subscribe(data => {
-      // this.socket.emit('refresh', {});
+  LikePost(post, username) {
+    if(this.CheckInArray(post.likes, username)) {
+      this.UnlikePost(post);
+    } else {
+      this.lSub = this.postService.addLike(post).subscribe(data => {
+        this.GetPosts();
+      }, err => console.log(err));
+    }
+  }
+
+  UnlikePost(post) {
+    this.lSub = this.postService.removeLike(post).subscribe(data => {
       this.GetPosts();
     }, err => console.log(err));
   }

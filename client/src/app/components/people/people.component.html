@@ -3,7 +3,7 @@
   <div class="row" *ngIf="!loading; else loadingBlock">
     <div class="col s12 m6 l4 cardDiv" *ngFor="let user of users">
       <div class="card">
-        <a (click)="ViewUser(user)">
+        <a (click)="ViewUser(user)" style="cursor: pointer;">
           <div class="card-image imgDiv">
             <img class="imgCircle responsive-img" src="https://res.cloudinary.com/dkqx63bec/image/upload/v{{user.picVersion}}/{{user.picId}}" alt="Avatar">
           </div>
@@ -16,7 +16,7 @@
           <p *ngIf="user.city && user.country">{{user.city}}, {{user.country}}</p>
           <button class="btn" *ngIf="!CheckInArray(userArr, user._id)" (click)="FollowUser(user)">Follow</button>
           <button class="btn disabled following" *ngIf="CheckInArray(userArr, user._id)">Following</button>
-          <a class="secondary-contetnt" [routerLink]="['/chat', user.username]">
+          <a class="secondary-content" [routerLink]="['/chat', user.username]">
             <i class="material-icons">chat</i>
           </a>
         </div>

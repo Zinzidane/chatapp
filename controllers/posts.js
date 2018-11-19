@@ -87,7 +87,6 @@ module.exports = {
   async GetAllPosts(req, res) {
     try {
 
-      console.log(req.query.offset);
       const posts = await Post.find({})
         .populate('user')
         .sort({created: -1})
@@ -97,13 +96,13 @@ module.exports = {
       const user = await User.findOne({
         _id: req.user._id
       });
-      if(user.city === '' && user.country === '') {
+      if(!user.city || !user.country) {
         request('https://geoip-db.com/json/', {json: true}, async (err, res, body) => {
           await User.update({
             _id: req.user._id
           }, {
             city: body.city,
-            country: body.country
+            country: body.country_name
           });
         }); 
       }
@@ -135,6 +134,21 @@ module.exports = {
         $inc: { totalLikes: 1 }
       })
       .then(() => res.status(HttpStatus.OK).json({message: 'You liked the post'}))
+      .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Error occured'}));
+  },
+  async RemoveLike(req, res) {
+    const postId = req.body._id;
+    await Post.updateOne({
+        _id: postId,
+        // To remove like only if user liked the post before
+        "likes.username": {$eq: req.user.username}
+      }, {
+        $pull: { likes: {
+          username: req.user.username
+        }},
+        $inc: { totalLikes: -1 }
+      })
+      .then(() => res.status(HttpStatus.OK).json({message: 'You unliked the post'}))
       .catch(err => res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Error occured'}));
   },
   async AddComment(req, res) {

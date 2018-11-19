@@ -8,6 +8,7 @@ router.get('/posts', AuthHelper.VerifyToken, PostCtrl.GetAllPosts);
 router.get('/post/:id', AuthHelper.VerifyToken, PostCtrl.GetPost);
 router.post('/post/add-post', AuthHelper.VerifyToken, PostCtrl.AddPost);
 router.post('/post/add-like', AuthHelper.VerifyToken, PostCtrl.AddLike);
+router.post('/post/remove-like', AuthHelper.VerifyToken, PostCtrl.RemoveLike);
 router.post('/post/add-comment', AuthHelper.VerifyToken, PostCtrl.AddComment);
 router.delete('/post/delete-post/:id', AuthHelper.VerifyToken, PostCtrl.DeletePost);
 

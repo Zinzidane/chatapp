@@ -25,6 +25,10 @@ export class PostService {
     return this.http.post(`/api/chatapp/post/add-like`, body);
   }
 
+  removeLike(body): Observable<any> {
+    return this.http.post(`/api/chatapp/post/remove-like`, body);
+  }
+
   addComment(postId, comment): Observable<any> {
     return this.http.post(`/api/chatapp/post/add-comment`, {postId, comment});
   }
